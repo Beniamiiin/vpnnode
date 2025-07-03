@@ -113,9 +113,9 @@ download_config() {
     # Подстановка значений переменных в фигурных скобках
     log_info "Заменяем переменные {GRAFANA_FLEET_URL}, {GRAFANA_FLEET_USERNAME}, {GRAFANA_FLEET_PASSWORD} на их значения..."
     sed -i \
-        -e "s|{GRAFANA_FLEET_URL}|"$FLEET_URL"|g" \
-        -e "s|{GRAFANA_FLEET_USERNAME}|"$FLEET_USERNAME"|g" \
-        -e "s|{GRAFANA_FLEET_PASSWORD}|"$FLEET_PASSWORD"|g" \
+        -e "s|{GRAFANA_FLEET_URL}|$FLEET_URL|g" \
+        -e "s|{GRAFANA_FLEET_USERNAME}|$FLEET_USERNAME|g" \
+        -e "s|{GRAFANA_FLEET_PASSWORD}|$FLEET_PASSWORD|g" \
         /tmp/alloy_config.tmp
     log_success "Значения переменных успешно подставлены в конфиг"
 }
