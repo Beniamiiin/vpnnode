@@ -216,7 +216,7 @@ main() {
     check_root
     check_docker
     setup_env_vars "$1" "$2" "$3"
-    download_config "$1" "$2" "$3" "$4"
+    download_config "$1" "$2" "$3"
     setup_config
     stop_old_container
     start_container
