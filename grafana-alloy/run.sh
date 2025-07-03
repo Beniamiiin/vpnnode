@@ -90,7 +90,7 @@ download_config() {
     local github_repo="https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy"
     
     # Параметр для передачи URL конфига
-    local config_url="${github_repo}/local/local.alloy"
+    local config_url="${github_repo}/local/local.alloy?nocache=$(uuidgen)"
     
     log_info "Загружаем удалённый конфиг из: $config_url"
     
