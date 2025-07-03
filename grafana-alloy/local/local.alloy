@@ -4,10 +4,10 @@ logging {
 }
 
 remotecfg {
-    url = sys.env("GRAFANA_FLEET_URL")
+    url = {GRAFANA_FLEET_URL}
     basic_auth {
-        username      = sys.env("GRAFANA_FLEET_USERNAME")
-        password      = sys.env("GRAFANA_FLEET_PASSWORD")
+        username      = {GRAFANA_FLEET_USERNAME}
+        password      = {GRAFANA_FLEET_PASSWORD}
     }
 
     id             = constants.hostname

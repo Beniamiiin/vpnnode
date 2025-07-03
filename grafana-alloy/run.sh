@@ -110,15 +110,14 @@ download_config() {
     
     log_success "Удалённый конфиг успешно загружен"
     
-    # Подстановка переменных окружения в конфиг
-    if command -v envsubst &> /dev/null; then
-        log_info "Подставляем значения переменных окружения в конфиг..."
-        envsubst < /tmp/alloy_config.tmp > /tmp/alloy_config.tmp.subst
-        mv /tmp/alloy_config.tmp.subst /tmp/alloy_config.tmp
-        log_success "Переменные окружения подставлены в конфиг"
-    else
-        log_warning "envsubst не найден, переменные окружения не были подставлены в конфиг!"
-    fi
+    # Подстановка значений переменных в фигурных скобках
+    log_info "Заменяем переменные {GRAFANA_FLEET_URL}, {GRAFANA_FLEET_USERNAME}, {GRAFANA_FLEET_PASSWORD} на их значения..."
+    sed -i '' \
+        -e "s|{GRAFANA_FLEET_URL}|$FLEET_URL|g" \
+        -e "s|{GRAFANA_FLEET_USERNAME}|$FLEET_USERNAME|g" \
+        -e "s|{GRAFANA_FLEET_PASSWORD}|$FLEET_PASSWORD|g" \
+        /tmp/alloy_config.tmp
+    log_success "Значения переменных успешно подставлены в конфиг"
 }
 
 # Настройка директорий и конфига
