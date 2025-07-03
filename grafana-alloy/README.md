@@ -37,7 +37,7 @@ sudo ./run.sh <FLEET_URL> <FLEET_USERNAME> <FLEET_PASSWORD>
 ### Удаленный запуск
 ```bash
 # Прямая загрузка и выполнение
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpn/refs/heads/master/grafana-alloy/run.sh | sudo bash -s <FLEET_URL> <FLEET_USERNAME> <FLEET_PASSWORD>
+curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh | sudo bash -s <FLEET_URL> <FLEET_USERNAME> <FLEET_PASSWORD>
 ```
 
 ### Параметры

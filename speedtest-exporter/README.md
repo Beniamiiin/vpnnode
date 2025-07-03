@@ -23,16 +23,16 @@
 ### Удаленный запуск
 ```bash
 # Прямая загрузка и выполнение (с автовыбором сервера)
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpn/refs/heads/master/speedtest-exporter/run.sh | bash -s 60
+curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh | bash -s 60
 
 # Прямая загрузка и выполнение (с указанием сервера)
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpn/refs/heads/master/speedtest-exporter/run.sh | bash -s 60 12345
+curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh | bash -s 60 12345
 ```
 
 ## Доступ
 
 Метрики доступны по адресу:
-- **Удаленно:** http://server-ip:9090/metrics
+- **Удаленно:** http://server-ip:9090
 
 ## Конфигурация
 

@@ -22,7 +22,7 @@
 ### Удаленный запуск
 ```bash
 # Прямая загрузка и выполнение
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpn/refs/heads/master/xray-checker/run.sh | bash -s {SUBSCRIPTION_URL}
+curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/xray-checker/run.sh | bash -s {SUBSCRIPTION_URL}
 ```
 
 ## Доступ

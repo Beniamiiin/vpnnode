@@ -39,4 +39,4 @@ docker run -d \
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
 echo "speedtest-exporter запущен на порту 9090"
-echo "Метрики доступны по адресу: http://$SERVER_IP:9090/metrics"
+echo "Метрики доступны по адресу: http://$SERVER_IP:9090"
