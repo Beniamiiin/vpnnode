@@ -110,6 +110,8 @@ download_config() {
     
     log_success "Удалённый конфиг успешно загружен"
     
+    cat /tmp/alloy_config.tmp
+
     # Подстановка значений переменных в фигурных скобках
     log_info "Заменяем переменные {GRAFANA_FLEET_URL}, {GRAFANA_FLEET_USERNAME}, {GRAFANA_FLEET_PASSWORD} на их значения..."
     sed -i '' \
