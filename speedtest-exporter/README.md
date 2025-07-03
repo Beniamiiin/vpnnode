@@ -17,16 +17,16 @@
 
 ### Локальный запуск
 ```bash
-./run.sh {UPDATE_INTERVAL} {SERVER_IDS}
+./run.sh {UPDATE_INTERVAL} [SERVER_IDS]
 ```
 
 ### Удаленный запуск
 ```bash
 # Прямая загрузка и выполнение (с автовыбором сервера)
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh | bash -s 60
+curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s 60
 
 # Прямая загрузка и выполнение (с указанием сервера)
-curl -fsSL https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh | bash -s 60 12345
+curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s 60 12345
 ```
 
 ## Доступ

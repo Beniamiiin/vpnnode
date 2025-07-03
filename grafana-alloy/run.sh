@@ -88,7 +88,7 @@ setup_env_vars() {
 # Загрузка конфига Alloy
 download_config() {
     local config_url=""
-    local github_repo="https://raw.githubusercontent.com/Beniamiiin/vpn/refs/heads/master/grafana-alloy"
+    local github_repo="https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/grafana-alloy"
     
     # Если мы в локальной директории с файлом
     if [ -f "local/local.alloy" ]; then
@@ -102,7 +102,7 @@ download_config() {
     if [ ! -z "$4" ]; then
         config_url="$4"
     else
-        config_url="${github_repo}/local/local.alloy"
+        config_url="${github_repo}/local/local.alloy?$(date +%s)"
     fi
     
     log_info "Загружаем конфиг из: $config_url"
