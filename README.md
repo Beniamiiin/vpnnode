@@ -7,19 +7,19 @@
 ### 🔍 XRay Checker
 Проверка VPN/прокси подключений с веб-интерфейсом
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/xray-checker/run.sh?$(date +%s)" | bash -s {SUBSCRIPTION_URL}
+curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/xray-checker/run.sh?$(date +%s)" | bash -s {SUBSCRIPTION_URL}
 ```
 
 ### 📊 Speedtest Exporter  
 Мониторинг скорости интернета для Prometheus
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s {UPDATE_INTERVAL} {SERVER_IDS}
+curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s {UPDATE_INTERVAL} {SERVER_IDS}
 ```
 
 ### 📈 Grafana Alloy
 Агент мониторинга с Fleet Management
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/grafana-alloy/run.sh?$(date +%s)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD}
+curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?$(date +%s)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD}
 ```
 
 ## Структура
