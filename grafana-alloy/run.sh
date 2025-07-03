@@ -118,8 +118,6 @@ download_config() {
         -e "s|{GRAFANA_FLEET_PASSWORD}|$FLEET_PASSWORD|g" \
         /tmp/alloy_config.tmp
     log_success "Значения переменных успешно подставлены в конфиг"
-
-    cat /tmp/alloy_config.tmp
 }
 
 # Настройка директорий и конфига
