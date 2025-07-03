@@ -1,0 +1,16 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+remotecfg {
+    url = sys.env("GRAFANA_FLEET_URL")
+    basic_auth {
+        username      = sys.env("GRAFANA_FLEET_USERNAME")
+        password      = sys.env("GRAFANA_FLEET_PASSWORD")
+    }
+
+    id             = constants.hostname
+    attributes     = {"cluster" = "dev", "namespace" = "otlp-dev"}
+    poll_frequency = "5m"
+}

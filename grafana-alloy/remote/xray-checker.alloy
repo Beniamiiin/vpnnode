@@ -1,0 +1,36 @@
+prometheus.remote_write "grafana_cloud" {
+	endpoint {
+		url = sys.env("GRAFANA_PROMETHEUS_URL")
+
+		basic_auth {
+			username = sys.env("GRAFANA_PROMETHEUS_USERNAME")
+			password = sys.env("GRAFANA_PROMETHEUS_PASSWORD")
+		}
+	}
+}
+
+discovery.relabel "xray_checker" {
+	targets = [
+		{"__address__" = "127.0.0.1:2112"},
+	]
+
+	rule {
+		target_label = "job"
+		replacement  = "xray-checker"
+	}
+
+	rule {
+		target_label = "hostname"
+		replacement  = sys.env("HOSTNAME")
+	}
+
+	rule {
+		target_label = "instance"
+		replacement  = sys.env("SERVER_IP")
+	}
+}
+
+prometheus.scrape "xray_checker" {
+	targets    = discovery.relabel.xray_checker.output
+	forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
