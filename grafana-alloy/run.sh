@@ -108,7 +108,7 @@ download_config() {
     log_info "Загружаем конфиг из: $config_url"
     
     if command -v curl &> /dev/null; then
-        curl -fsSL "$config_url" -o /tmp/alloy_config.tmp
+        curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "$config_url" -o /tmp/alloy_config.tmp
     elif command -v wget &> /dev/null; then
         wget -q "$config_url" -O /tmp/alloy_config.tmp
     else

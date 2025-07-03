@@ -23,10 +23,10 @@
 ### Удаленный запуск
 ```bash
 # Прямая загрузка и выполнение (с автовыбором сервера)
-curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s 60
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh" | bash -s 60
 
 # Прямая загрузка и выполнение (с указанием сервера)
-curl -fsSL "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh?$(date +%s)" | bash -s 60 12345
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh" | bash -s 60 12345
 ```
 
 ## Доступ
