@@ -88,7 +88,7 @@ setup_env_vars() {
 # Загрузка конфига Alloy
 download_config() {
     local config_url=""
-    local github_repo="https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy"
+    local github_repo="https://github.com/Beniamiiin/vpnnode"
     
     # Если мы в локальной директории с файлом
     if [ -f "local/local.alloy" ]; then
