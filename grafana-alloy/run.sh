@@ -87,25 +87,12 @@ setup_env_vars() {
 
 # Загрузка конфига Alloy
 download_config() {
-    local config_url=""
     local github_repo="https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy"
     
-    # Если мы в локальной директории с файлом
-    if [ -f "local/local.alloy" ]; then
-        log_info "Используем локальный конфиг local/local.alloy"
-        cp local/local.alloy /tmp/alloy_config.tmp
-        log_success "Локальный конфиг загружен"
-        return 0
-    fi
-    
     # Параметр для передачи URL конфига
-    if [ ! -z "$4" ]; then
-        config_url="$4"
-    else
-        config_url="${github_repo}/local/local.alloy?$(date +%s)"
-    fi
+    local config_url="${github_repo}/local/local.alloy"
     
-    log_info "Загружаем конфиг из: $config_url"
+    log_info "Загружаем удалённый конфиг из: $config_url"
     
     if command -v curl &> /dev/null; then
         curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "$config_url" -o /tmp/alloy_config.tmp
@@ -121,7 +108,17 @@ download_config() {
         exit 1
     fi
     
-    log_success "Конфиг успешно загружен"
+    log_success "Удалённый конфиг успешно загружен"
+    
+    # Подстановка переменных окружения в конфиг
+    if command -v envsubst &> /dev/null; then
+        log_info "Подставляем значения переменных окружения в конфиг..."
+        envsubst < /tmp/alloy_config.tmp > /tmp/alloy_config.tmp.subst
+        mv /tmp/alloy_config.tmp.subst /tmp/alloy_config.tmp
+        log_success "Переменные окружения подставлены в конфиг"
+    else
+        log_warning "envsubst не найден, переменные окружения не были подставлены в конфиг!"
+    fi
 }
 
 # Настройка директорий и конфига
@@ -164,16 +161,13 @@ start_container() {
     log_info "Hostname: $hostname_var"
     log_info "Server IP: $server_ip"
     
-    # Запускаем контейнер с переданными кредами
+    # Запускаем контейнер без передачи чувствительных переменных окружения
     docker run \
         -d \
         --network=host \
         --name grafana-alloy \
         -e HOSTNAME="$hostname_var" \
         -e SERVER_IP="$server_ip" \
-        -e GRAFANA_FLEET_URL="$FLEET_URL" \
-        -e GRAFANA_FLEET_USERNAME="$FLEET_USERNAME" \
-        -e GRAFANA_FLEET_PASSWORD="$FLEET_PASSWORD" \
         -v /etc/alloy/config.alloy:/etc/alloy/config.alloy \
         -v /var/lib/alloy/data:/var/lib/alloy/data \
         -p 12345:12345 \
@@ -233,14 +227,7 @@ main() {
     log_success "🎉 Grafana Alloy успешно развернут!"
     echo
     
-    # Спрашиваем, показывать ли логи
-    read -p "Показать логи в реальном времени? [y/N]: " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        show_logs
-    else
-        log_info "Для просмотра логов выполните: docker logs grafana-alloy -f"
-    fi
+    show_logs
 }
 
 # Запуск основной функции
