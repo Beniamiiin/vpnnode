@@ -11,7 +11,7 @@ prometheus.remote_write "grafana_cloud" {
 
 discovery.relabel "speedtest" {
 	targets = [
-		{"__address__" = "127.0.0.1:2112"},
+		{"__address__" = "127.0.0.1:9000"},
 	]
 
 	rule {
