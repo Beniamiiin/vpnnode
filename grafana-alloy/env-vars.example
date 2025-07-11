@@ -11,4 +11,8 @@ GRAFANA_PROMETHEUS_PASSWORD=glc_xxx
 
 # Системные переменные (автоматически устанавливаются скриптом)
 HOSTNAME=auto-detected
-SERVER_IP=auto-detected 
+SERVER_IP=auto-detected
+
+# Переменные для джобы с метриками
+METRICS_USER=
+METRICS_PASS=

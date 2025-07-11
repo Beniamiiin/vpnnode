@@ -28,18 +28,20 @@ log_error() {
 
 # Показ справки
 show_help() {
-    echo "Использование: $0 [FLEET_URL] [FLEET_USERNAME] [FLEET_PASSWORD]"
+    echo "Использование: $0 [FLEET_URL] [FLEET_USERNAME] [FLEET_PASSWORD] [METRICS_USER] [METRICS_PASS]"
     echo
     echo "Параметры:"
     echo "  FLEET_URL      - URL Fleet Management (например: https://fleet-management-prod-011.grafana.net)"
     echo "  FLEET_USERNAME - Username для Fleet Management"
     echo "  FLEET_PASSWORD - Password для Fleet Management"
+    echo "  METRICS_USER   - (опционально) Username для basic_auth метрик"
+    echo "  METRICS_PASS   - (опционально) Password для basic_auth метрик"
     echo
     echo "Пример:"
-    echo "  $0 https://fleet-management-prod-011.grafana.net 1300043 glc_xxx"
+    echo "  $0 https://fleet-management-prod-011.grafana.net 1300043 glc_xxx metrics_user metrics_pass"
     echo
     echo "Если параметры не указаны, используются переменные окружения:"
-    echo "  GRAFANA_FLEET_URL, GRAFANA_FLEET_USERNAME, GRAFANA_FLEET_PASSWORD"
+    echo "  GRAFANA_FLEET_URL, GRAFANA_FLEET_USERNAME, GRAFANA_FLEET_PASSWORD, METRICS_USER, METRICS_PASS"
 }
 
 # Проверка прав root
@@ -71,6 +73,8 @@ setup_env_vars() {
     FLEET_URL="${1:-$GRAFANA_FLEET_URL}"
     FLEET_USERNAME="${2:-$GRAFANA_FLEET_USERNAME}"
     FLEET_PASSWORD="${3:-$GRAFANA_FLEET_PASSWORD}"
+    METRICS_USER="${4:-$METRICS_USER}"
+    METRICS_PASS="${5:-$METRICS_PASS}"
     
     # Проверяем обязательные параметры
     if [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
@@ -83,6 +87,12 @@ setup_env_vars() {
     log_info "Fleet URL: $FLEET_URL"
     log_info "Fleet Username: $FLEET_USERNAME"
     log_info "Fleet Password: [СКРЫТ]"
+    if [ -n "$METRICS_USER" ]; then
+        log_info "METRICS_USER: $METRICS_USER"
+    fi
+    if [ -n "$METRICS_PASS" ]; then
+        log_info "METRICS_PASS: [СКРЫТ]"
+    fi
 }
 
 # Загрузка конфига Alloy
@@ -160,13 +170,23 @@ start_container() {
     log_info "Hostname: $hostname_var"
     log_info "Server IP: $server_ip"
     
-    # Запускаем контейнер без передачи чувствительных переменных окружения
-    docker run \
+    # Формируем дополнительные переменные окружения для метрик
+    local metrics_env=""
+    if [ -n "$METRICS_USER" ]; then
+        metrics_env+="-e METRICS_USER=\"$METRICS_USER\" "
+    fi
+    if [ -n "$METRICS_PASS" ]; then
+        metrics_env+="-e METRICS_PASS=\"$METRICS_PASS\" "
+    fi
+    
+    # Запускаем контейнер с передачей переменных окружения
+    eval docker run \
         -d \
         --network=host \
         --name grafana-alloy \
         -e HOSTNAME="$hostname_var" \
         -e SERVER_IP="$server_ip" \
+        $metrics_env \
         -v /etc/alloy/config.alloy:/etc/alloy/config.alloy \
         -v /var/lib/alloy/data:/var/lib/alloy/data \
         -p 12345:12345 \
@@ -215,7 +235,7 @@ main() {
     
     check_root
     check_docker
-    setup_env_vars "$1" "$2" "$3"
+    setup_env_vars "$1" "$2" "$3" "$4" "$5"
     download_config "$1" "$2" "$3"
     setup_config
     stop_old_container

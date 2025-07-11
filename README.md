@@ -19,7 +19,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ### 📈 Grafana Alloy
 Агент мониторинга с Fleet Management
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?nocache=$(uuidgen)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD}
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?nocache=$(uuidgen)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 ```
 
 ## Структура
@@ -36,7 +36,7 @@ vpnnode/
 
 ## Быстрый старт
 
-1. **Мониторинг** - разверните Grafana Alloy первым (требует креды Fleet Management)
+1. **Мониторинг** - разверните Grafana Alloy первым (требует креды Fleet Management, а также опционально METRICS_USER и METRICS_PASS для basic_auth метрик)
 2. **XRay Checker** - добавьте проверку VPN (требует SUBSCRIPTION_URL)
 3. **Speedtest** - включите мониторинг скорости (требует интервал обновления)
 
@@ -44,4 +44,4 @@ vpnnode/
 
 ## Безопасность
 
-⚠️ **Все креды передаются как параметры** - никакие чувствительные данные не хранятся в коде.
+⚠️ **Все креды передаются как параметры** - никакие чувствительные данные не хранятся в коде. Для метрик с basic_auth используйте параметры METRICS_USER и METRICS_PASS.
