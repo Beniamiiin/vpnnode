@@ -233,6 +233,7 @@ main() {
     echo "========================================="
     echo
     
+    eval rm -rf /var/lib/alloy/data && rm -rf /etc/alloy/config.alloy
     check_root
     check_docker
     setup_env_vars "$1" "$2" "$3" "$4" "$5"
