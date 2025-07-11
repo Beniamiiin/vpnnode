@@ -31,15 +31,15 @@ discovery.relabel "remnawave" {
 }
 
 prometheus.scrape "remnawave" {
-    scrape_interval = "30s"
-    scrape_timeout  = "10s"
+	scrape_interval = "30s"
+	scrape_timeout  = "10s"
 
-    targets         = discovery.relabel.remnawave.output
+	targets 		= discovery.relabel.remnawave.output
 
-    basic_auth {
-        username = sys.env("METRICS_USER")
-        password = sys.env("METRICS_PASS")
-    }
+	basic_auth {
+		username = sys.env("METRICS_USER")
+		password = sys.env("METRICS_PASS")
+	}
 
-    forward_to      = [prometheus.remote_write.grafana_cloud.receiver]
+	forward_to 		= [prometheus.remote_write.grafana_cloud.receiver]
 }
