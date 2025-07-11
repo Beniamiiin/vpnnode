@@ -10,10 +10,10 @@
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/xray-checker/run.sh?nocache=$(uuidgen)" | bash -s {SUBSCRIPTION_URL}
 ```
 
-### 📊 Speedtest Exporter  
+### 📊 Speedtest
 Мониторинг скорости интернета для Prometheus
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest-exporter/run.sh?nocache=$(uuidgen)" | bash -s {UPDATE_INTERVAL} {SERVER_IDS}
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest/run.sh?nocache=$(uuidgen)" | bash -s {UPDATE_INTERVAL} {SERVER_IDS}
 ```
 
 ### 📈 Grafana Alloy
@@ -26,9 +26,9 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 
 ```
 vpnnode/
-├── xray-checker/          # XRay Checker развертывание
-├── speedtest-exporter/    # Speedtest мониторинг  
-├── grafana-alloy/         # Grafana Alloy агент
+├── xray-checker/         # XRay Checker развертывание
+├── speedtest/            # Speedtest мониторинг  
+├── grafana-alloy/        # Grafana Alloy агент
 │   ├── local/            # Конфиги для серверов
 │   └── remote/           # Библиотека для Fleet Management
 └── alloy/                # Устаревшие конфиги
