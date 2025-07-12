@@ -17,13 +17,7 @@ echo "🚀 Запуск проверки скорости сервера..."
 echo "Минимальная приемлемая скорость: 1 Гбит/с"
 echo ""
 
-# Скачиваем speedtest скрипт, убираем команды очистки и выполняем
-SPEEDTEST_SCRIPT=$(mktemp)
-wget -qO "$SPEEDTEST_SCRIPT" sh.vpn.lease/speedtest.sh
-# Убираем команды очистки экрана из скрипта
-sed -i.bak 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$SPEEDTEST_SCRIPT" 2>/dev/null || sed -i '' 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$SPEEDTEST_SCRIPT" 2>/dev/null
-bash "$SPEEDTEST_SCRIPT"
-rm -f "$SPEEDTEST_SCRIPT" "$SPEEDTEST_SCRIPT.bak" 2>/dev/null
+bash sp.sh
 
 echo ""
 echo "✅ Проверка скорости завершена"
