@@ -22,6 +22,12 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?nocache=$(uuidgen)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 ```
 
+### 🏥 Server Check
+Комплексная проверка качества серверов перед развертыванием
+```bash
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash -s {LANGUAGE}
+```
+
 ## Структура
 
 ```
@@ -31,14 +37,16 @@ vpnnode/
 ├── grafana-alloy/        # Grafana Alloy агент
 │   ├── local/            # Конфиги для серверов
 │   └── remote/           # Библиотека для Fleet Management
+├── server-check/         # Проверка качества серверов
 └── alloy/                # Устаревшие конфиги
 ```
 
 ## Быстрый старт
 
-1. **Мониторинг** - разверните Grafana Alloy первым (требует креды Fleet Management, а также опционально METRICS_USER и METRICS_PASS для basic_auth метрик)
-2. **XRay Checker** - добавьте проверку VPN (требует SUBSCRIPTION_URL)
-3. **Speedtest** - включите мониторинг скорости (требует интервал обновления)
+1. **Проверка сервера** - проверьте качество нового сервера перед развертыванием (скорость ≥ 1 Гбит/с, IP репутация, доступность сервисов)
+2. **Мониторинг** - разверните Grafana Alloy первым (требует креды Fleet Management, а также опционально METRICS_USER и METRICS_PASS для basic_auth метрик)
+3. **XRay Checker** - добавьте проверку VPN (требует SUBSCRIPTION_URL)
+4. **Speedtest** - включите мониторинг скорости (требует интервал обновления)
 
 Все сервисы интегрируются с Grafana Cloud для централизованного мониторинга.
 
