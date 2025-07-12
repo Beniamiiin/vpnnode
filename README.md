@@ -25,7 +25,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ### 🏥 Server Check
 Комплексная проверка качества серверов перед развертыванием
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash -s {LANGUAGE}
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash -s {LANGUAGE}
 ```
 
 ## Структура

@@ -29,10 +29,10 @@ bash run.sh ru
 
 ```bash
 # Проверка на английском языке (по умолчанию)
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash
 
 # Проверка на русском языке
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnhero/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash -s ru
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/server-check/run.sh?nocache=$(uuidgen)" | bash -s ru
 ```
 
 ### 📁 Локальное использование
