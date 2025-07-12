@@ -17,7 +17,13 @@ echo "🚀 Запуск проверки скорости сервера..."
 echo "Минимальная приемлемая скорость: 1 Гбит/с"
 echo ""
 
-bash ./server-check/sp.sh
+# Скачиваем speedtest скрипт, убираем команды очистки и выполняем
+SPEEDTEST_SCRIPT=$(mktemp)
+wget -qO "$SPEEDTEST_SCRIPT" sh.vpn.lease/speedtest.sh
+# Убираем команды очистки экрана из скрипта
+sed -i.bak 's/\bclear\b//g' "$SPEEDTEST_SCRIPT"
+bash "$SPEEDTEST_SCRIPT"
+rm -f "$SPEEDTEST_SCRIPT" "$SPEEDTEST_SCRIPT.bak" 2>/dev/null
 
 echo ""
 echo "✅ Проверка скорости завершена"
@@ -38,7 +44,7 @@ echo ""
 PLACE_SCRIPT=$(mktemp)
 curl -Ls sh.vpn.lease/place.sh -o "$PLACE_SCRIPT"
 # Убираем команды очистки экрана из скрипта
-sed -i.bak 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$PLACE_SCRIPT" 2>/dev/null || sed -i '' 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$PLACE_SCRIPT" 2>/dev/null
+sed -i.bak 's/\bclear\b//g' "$PLACE_SCRIPT"
 # Выполняем place.sh с параметрами (используем bash вместо source для передачи параметров)
 bash "$PLACE_SCRIPT" -l "$LANGUAGE"
 rm -f "$PLACE_SCRIPT" "$PLACE_SCRIPT.bak" 2>/dev/null
