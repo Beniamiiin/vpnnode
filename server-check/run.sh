@@ -17,8 +17,13 @@ echo "🚀 Запуск проверки скорости сервера..."
 echo "Минимальная приемлемая скорость: 1 Гбит/с"
 echo ""
 
-# Запускаем speedtest и фильтруем escape-последовательности для очистки экрана
-wget -qO- sh.vpn.lease/speedtest.sh | bash 2>&1 | sed 's/\x1b\[[0-9;]*[JHmK]//g' | sed 's/\x1b\[2J//g' | sed 's/\x1b\[H//g'
+# Скачиваем speedtest скрипт, убираем команды очистки и выполняем
+SPEEDTEST_SCRIPT=$(mktemp)
+wget -qO "$SPEEDTEST_SCRIPT" sh.vpn.lease/speedtest.sh
+# Убираем команды очистки экрана из скрипта
+sed -i.bak 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$SPEEDTEST_SCRIPT" 2>/dev/null || sed -i '' 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$SPEEDTEST_SCRIPT" 2>/dev/null
+bash "$SPEEDTEST_SCRIPT"
+rm -f "$SPEEDTEST_SCRIPT" "$SPEEDTEST_SCRIPT.bak" 2>/dev/null
 
 echo ""
 echo "✅ Проверка скорости завершена"
@@ -35,8 +40,14 @@ echo "Язык: $LANGUAGE"
 echo "Проверяем доступность различных сервисов и регион при доступе с сервера"
 echo ""
 
-# Запускаем place.sh и также фильтруем escape-последовательности
-curl -Ls sh.vpn.lease/place.sh | bash -s -- -l "$LANGUAGE" 2>&1 | sed 's/\x1b\[[0-9;]*[JHmK]//g' | sed 's/\x1b\[2J//g' | sed 's/\x1b\[H//g'
+# Скачиваем place.sh скрипт, убираем команды очистки и выполняем
+PLACE_SCRIPT=$(mktemp)
+curl -Ls sh.vpn.lease/place.sh -o "$PLACE_SCRIPT"
+# Убираем команды очистки экрана из скрипта
+sed -i.bak 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$PLACE_SCRIPT" 2>/dev/null || sed -i '' 's/clear//g; s/tput clear//g; /printf "\\033\[2J"/d; /printf "\\033\[H"/d; /echo -e "\\033\[2J"/d; /echo -e "\\033\[H"/d' "$PLACE_SCRIPT" 2>/dev/null
+# Выполняем place.sh с параметрами (используем bash вместо source для передачи параметров)
+bash "$PLACE_SCRIPT" -l "$LANGUAGE"
+rm -f "$PLACE_SCRIPT" "$PLACE_SCRIPT.bak" 2>/dev/null
 
 echo ""
 echo "✅ Проверка сервисов завершена"
