@@ -1,38 +1,34 @@
 #!/bin/bash
 
-# Полное развертывание VPN ноды
-# Использование: curl ... | bash -s {SSL_CERT} {REMNA_PORT} {SUBSCRIPTION_URL} {SPEEDTEST_INTERVAL} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
+# Развертывание VPN ноды
+# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_INTERVAL} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 
 set -e
 
 # Параметры
 SSL_CERT="$1"
-REMNA_PORT="${2:-2222}"
-SUBSCRIPTION_URL="$3"
-SPEEDTEST_INTERVAL="${4:-3600}"
-SPEEDTEST_SERVERS="$5"
-FLEET_URL="$6"
-FLEET_USERNAME="$7"
-FLEET_PASSWORD="$8"
-METRICS_USER="${9:-}"
-METRICS_PASS="${10:-}"
+SPEEDTEST_INTERVAL="${2:-3600}"
+SPEEDTEST_SERVERS="$3"
+FLEET_URL="$4"
+FLEET_USERNAME="$5"
+FLEET_PASSWORD="$6"
+METRICS_USER="${7:-}"
+METRICS_PASS="${8:-}"
 
 # Проверка обязательных параметров
-if [ -z "$SSL_CERT" ] || [ -z "$SUBSCRIPTION_URL" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
+if [ -z "$SSL_CERT" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
     echo "❌ Ошибка: Не все обязательные параметры указаны"
     echo ""
     echo "Использование:"
-    echo "curl -fsSL ... | bash -s SSL_CERT REMNA_PORT SUBSCRIPTION_URL SPEEDTEST_INTERVAL SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
+    echo "curl -fsSL ... | bash -s SSL_CERT SPEEDTEST_INTERVAL SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
     echo ""
     echo "Обязательные параметры:"
     echo "  SSL_CERT           - SSL сертификат из панели Remnawave"
-    echo "  SUBSCRIPTION_URL   - URL подписки для XRay Checker"
     echo "  FLEET_URL          - URL Fleet Management для Grafana Alloy"
     echo "  FLEET_USERNAME     - Имя пользователя Fleet Management"
     echo "  FLEET_PASSWORD     - Пароль Fleet Management"
     echo ""
     echo "Необязательные параметры:"
-    echo "  REMNA_PORT         - Порт для Remnawave Node (по умолчанию: 2222)"
     echo "  SPEEDTEST_INTERVAL - Интервал speedtest в секундах (по умолчанию: 3600)"
     echo "  SPEEDTEST_SERVERS  - ID серверов для speedtest (необязательно)"
     echo "  METRICS_USER       - Пользователь для basic_auth метрик (необязательно)"
@@ -42,7 +38,6 @@ fi
 
 echo "🚀 Начинаем развертывание VPN ноды"
 echo "=================================="
-echo "Remnawave порт: $REMNA_PORT"
 echo "Speedtest интервал: $SPEEDTEST_INTERVAL сек"
 echo ""
 
@@ -107,7 +102,7 @@ cd /opt/remnanode
 
 # Создаем .env файл
 cat > .env << EOF
-APP_PORT=$REMNA_PORT
+APP_PORT=2222
 $SSL_CERT
 EOF
 
@@ -127,20 +122,11 @@ EOF
 # Запускаем Remnawave Node
 docker compose up -d
 
-echo "✅ Remnawave Node установлен и запущен на порту $REMNA_PORT"
+echo "✅ Remnawave Node установлен и запущен на порту 2222"
 echo ""
 
-# 3. Установка XRay Checker
-echo "3️⃣ Установка XRay Checker..."
-echo "============================"
-
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/xray-checker/run.sh?nocache=$(uuidgen)" | bash -s "$SUBSCRIPTION_URL"
-
-echo "✅ XRay Checker установлен"
-echo ""
-
-# 4. Установка Speedtest
-echo "4️⃣ Установка Speedtest мониторинга..."
+# 3. Установка Speedtest
+echo "3️⃣ Установка Speedtest мониторинга..."
 echo "====================================="
 
 if [ -n "$SPEEDTEST_SERVERS" ]; then
@@ -152,8 +138,8 @@ fi
 echo "✅ Speedtest мониторинг установлен"
 echo ""
 
-# 5. Установка и настройка Grafana Alloy
-echo "5️⃣ Установка Grafana Alloy..."
+# 4. Установка и настройка Grafana Alloy
+echo "4️⃣ Установка Grafana Alloy..."
 echo "============================="
 
 if [ -n "$METRICS_USER" ] && [ -n "$METRICS_PASS" ]; then
@@ -171,18 +157,15 @@ echo "=========================="
 echo ""
 echo "📋 Установленные компоненты:"
 echo "• Docker и Docker Compose"
-echo "• Remnawave Node (порт $REMNA_PORT)"
-echo "• XRay Checker (веб-интерфейс на порту 8080)"
+echo "• Remnawave Node (порт 2222)"
 echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек)"
 echo "• Grafana Alloy (агент мониторинга)"
 echo ""
 echo "🔍 Проверка статуса сервисов:"
 echo "• docker ps - статус контейнеров"
 echo "• systemctl status alloy - статус Grafana Alloy"
-echo "• curl http://localhost:8080 - XRay Checker веб-интерфейс"
 echo ""
 echo "📊 Логи:"
 echo "• docker logs remnanode - логи Remnawave Node"
-echo "• docker logs xray-checker - логи XRay Checker" 
 echo "• docker logs speedtest-exporter - логи Speedtest"
 echo "• journalctl -u alloy -f - логи Grafana Alloy" 

@@ -1,6 +1,6 @@
-# Полное развертывание VPN ноды
+# Развертывание VPN ноды
 
-Скрипт `deploy.sh` автоматически устанавливает и настраивает полную VPN ноду с мониторингом.
+Скрипт `deploy.sh` автоматически устанавливает и настраивает VPN ноду с мониторингом.
 
 ## ⚠️ Требования
 
@@ -11,7 +11,7 @@
 ## 🚀 Быстрый запуск
 
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SSL_CERT}" 2222 "{SUBSCRIPTION_URL}" 3600 "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SSL_CERT}" 3600 "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
 ```
 
 ## 📋 Параметры
@@ -24,31 +24,28 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
    SSL_CERT_CERT=your_certificate_here
    ```
 
-2. **SUBSCRIPTION_URL** - URL подписки для XRay Checker
-   ```
-   https://your-subscription-url.com/subscription
-   ```
-
-3. **FLEET_URL** - URL Fleet Management для Grafana Alloy
+2. **FLEET_URL** - URL Fleet Management для Grafana Alloy
    ```
    https://your-fleet-management.com
    ```
 
-4. **FLEET_USERNAME** - Имя пользователя Fleet Management
+3. **FLEET_USERNAME** - Имя пользователя Fleet Management
 
-5. **FLEET_PASSWORD** - Пароль Fleet Management
+4. **FLEET_PASSWORD** - Пароль Fleet Management
 
 ### Необязательные параметры:
 
-6. **REMNA_PORT** (по умолчанию: 2222) - Порт для Remnawave Node
+5. **SPEEDTEST_INTERVAL** (по умолчанию: 3600) - Интервал speedtest в секундах
 
-7. **SPEEDTEST_INTERVAL** (по умолчанию: 3600) - Интервал speedtest в секундах
+6. **SPEEDTEST_SERVERS** (необязательно) - ID серверов для speedtest через запятую
 
-8. **SPEEDTEST_SERVERS** (необязательно) - ID серверов для speedtest через запятую
+7. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
 
-9. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
+8. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
 
-10. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
+### Фиксированные настройки:
+
+- **APP_PORT** - Порт Remnawave Node: 2222
 
 ## 📝 Примеры использования
 
@@ -57,8 +54,6 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SSL_CERT_KEY=your_key_here
 SSL_CERT_CERT=your_cert_here" \
-  2222 \
-  "https://your-subscription-url.com/subscription" \
   3600 \
   "" \
   "https://your-fleet-management.com" \
@@ -71,8 +66,6 @@ SSL_CERT_CERT=your_cert_here" \
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SSL_CERT_KEY=your_key_here
 SSL_CERT_CERT=your_cert_here" \
-  2222 \
-  "https://your-subscription-url.com/subscription" \
   1800 \
   "12345,67890" \
   "https://your-fleet-management.com" \
@@ -94,17 +87,12 @@ SSL_CERT_CERT=your_cert_here" \
 - Настройка SSL сертификатов
 - Запуск контейнера с `network_mode: host`
 
-### 3. XRay Checker  
-- Веб-интерфейс на порту 8080
-- Автоматическая проверка VPN подключений
-- Интеграция с подпиской
-
-### 4. Speedtest мониторинг
+### 3. Speedtest мониторинг
 - Регулярные проверки скорости интернета
 - Экспорт метрик в Prometheus формате
 - Настраиваемый интервал и серверы
 
-### 5. Grafana Alloy
+### 4. Grafana Alloy
 - Агент мониторинга с Fleet Management
 - Сбор системных метрик
 - Опциональная аутентификация
@@ -120,9 +108,6 @@ docker ps
 # Grafana Alloy
 systemctl status alloy
 
-# XRay Checker веб-интерфейс
-curl http://localhost:8080
-
 # Remnawave Node
 docker logs remnanode
 ```
@@ -132,9 +117,6 @@ docker logs remnanode
 ```bash
 # Логи Remnawave Node
 docker logs remnanode -f
-
-# Логи XRay Checker
-docker logs xray-checker -f
 
 # Логи Speedtest
 docker logs speedtest-exporter -f
