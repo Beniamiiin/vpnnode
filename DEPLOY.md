@@ -82,7 +82,9 @@ SSL_CERT_CERT=your_cert_here" \
 ### 2. Remnawave Node
 - Создание директории `/opt/remnanode`
 - Настройка SSL сертификатов
-- Запуск контейнера с `network_mode: host`
+- Создание папки для логов `/var/log/remnanode`
+- Настройка автоматической ротации логов (50MB, 5 файлов)
+- Запуск контейнера с `network_mode: host` и volume для логов
 
 ### 3. Speedtest мониторинг
 - Регулярные проверки скорости интернета
@@ -107,19 +109,48 @@ systemctl status alloy
 
 # Remnawave Node
 docker logs remnanode
+
+# Файловые логи Remnawave Node
+ls -la /var/log/remnanode/
+
+# Ротация логов
+logrotate -d /etc/logrotate.d/remnanode
 ```
 
 ## 📊 Логи и диагностика
 
 ```bash
-# Логи Remnawave Node
+# Логи контейнера Remnawave Node
 docker logs remnanode -f
+
+# Файловые логи Remnawave Node (рекомендуется)
+tail -f /var/log/remnanode/error.log
+tail -f /var/log/remnanode/access.log
+
+# Все логи Remnawave Node
+tail -f /var/log/remnanode/*.log
 
 # Логи Speedtest
 docker logs speedtest-exporter -f
 
 # Логи Grafana Alloy
 journalctl -u alloy -f
+```
+
+### Ротация логов
+
+Автоматически настроена ротация логов для Remnawave Node:
+- **Размер файла**: 50MB (ротация при превышении)
+- **Количество файлов**: 5 архивных файлов
+- **Сжатие**: да (gzip)
+- **Конфигурация**: `/etc/logrotate.d/remnanode`
+
+```bash
+# Проверка статуса ротации логов
+logrotate -d /etc/logrotate.d/remnanode
+
+# Принудительная ротация (для тестирования)
+logrotate -f /etc/logrotate.d/remnanode
 ```
 
 ## 🚨 Устранение неполадок

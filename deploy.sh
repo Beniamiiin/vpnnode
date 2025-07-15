@@ -107,10 +107,13 @@ cd /opt/remnanode
 # Создаем .env файл
 cat > .env << EOF
 APP_PORT=2222
-$SSL_CERT
+SSL_CERT=$SSL_CERT
 EOF
 
-# Создаем docker-compose.yml файл
+# Создаем папку для логов
+mkdir -p /var/log/remnanode
+
+# Создаем docker-compose.yml файл с настройкой логирования
 cat > docker-compose.yml << 'EOF'
 services:
     remnanode:
@@ -121,12 +124,34 @@ services:
         network_mode: host
         env_file:
             - .env
+        volumes:
+            - '/var/log/remnanode:/var/log/remnanode'
 EOF
+
+# Устанавливаем logrotate для ротации логов
+echo "Настройка ротации логов..."
+apt-get install -y logrotate
+
+# Создаем конфигурацию logrotate для Remnawave Node
+cat > /etc/logrotate.d/remnanode << 'EOF'
+/var/log/remnanode/*.log {
+      size 50M
+      rotate 5
+      compress
+      missingok
+      notifempty
+      copytruncate
+  }
+EOF
+
+# Тестируем конфигурацию logrotate
+logrotate -vf /etc/logrotate.d/remnanode > /dev/null 2>&1 || true
 
 # Запускаем Remnawave Node
 docker compose up -d
 
 echo "✅ Remnawave Node установлен и запущен на порту 2222"
+echo "📝 Логи: /var/log/remnanode/ (с автоматической ротацией)"
 echo ""
 
 # 3. Установка Speedtest
@@ -170,6 +195,9 @@ echo "• docker ps - статус контейнеров"
 echo "• systemctl status alloy - статус Grafana Alloy"
 echo ""
 echo "📊 Логи:"
-echo "• docker logs remnanode - логи Remnawave Node"
+echo "• docker logs remnanode - логи контейнера Remnawave Node"
+echo "• tail -f /var/log/remnanode/*.log - файловые логи Remnawave Node"
 echo "• docker logs speedtest-exporter - логи Speedtest"
-echo "• journalctl -u alloy -f - логи Grafana Alloy" 
+echo "• journalctl -u alloy -f - логи Grafana Alloy"
+echo ""
+echo "🔄 Ротация логов настроена автоматически (50MB, 5 файлов)" 
