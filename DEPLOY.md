@@ -11,7 +11,7 @@
 ## 🚀 Быстрый запуск
 
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SSL_CERT}" 3600 "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SSL_CERT}" "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
 ```
 
 ## 📋 Параметры
@@ -35,17 +35,16 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 
 ### Необязательные параметры:
 
-5. **SPEEDTEST_INTERVAL** (по умолчанию: 3600) - Интервал speedtest в секундах
+5. **SPEEDTEST_SERVERS** (необязательно) - ID серверов для speedtest через запятую
 
-6. **SPEEDTEST_SERVERS** (необязательно) - ID серверов для speedtest через запятую
+6. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
 
-7. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
-
-8. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
+7. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
 
 ### Фиксированные настройки:
 
 - **APP_PORT** - Порт Remnawave Node: 2222
+- **SPEEDTEST_INTERVAL** - Интервал speedtest: 60 секунд
 
 ## 📝 Примеры использования
 
@@ -54,7 +53,6 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SSL_CERT_KEY=your_key_here
 SSL_CERT_CERT=your_cert_here" \
-  3600 \
   "" \
   "https://your-fleet-management.com" \
   "fleet_username" \
@@ -66,7 +64,6 @@ SSL_CERT_CERT=your_cert_here" \
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SSL_CERT_KEY=your_key_here
 SSL_CERT_CERT=your_cert_here" \
-  1800 \
   "12345,67890" \
   "https://your-fleet-management.com" \
   "fleet_username" \

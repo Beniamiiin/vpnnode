@@ -1,26 +1,28 @@
 #!/bin/bash
 
 # Развертывание VPN ноды
-# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_INTERVAL} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
+# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 
 set -e
 
 # Параметры
 SSL_CERT="$1"
-SPEEDTEST_INTERVAL="${2:-3600}"
-SPEEDTEST_SERVERS="$3"
-FLEET_URL="$4"
-FLEET_USERNAME="$5"
-FLEET_PASSWORD="$6"
-METRICS_USER="${7:-}"
-METRICS_PASS="${8:-}"
+SPEEDTEST_SERVERS="$2"
+FLEET_URL="$3"
+FLEET_USERNAME="$4"
+FLEET_PASSWORD="$5"
+METRICS_USER="${6:-}"
+METRICS_PASS="${7:-}"
+
+# Константы
+SPEEDTEST_INTERVAL=60
 
 # Проверка обязательных параметров
 if [ -z "$SSL_CERT" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
     echo "❌ Ошибка: Не все обязательные параметры указаны"
     echo ""
     echo "Использование:"
-    echo "curl -fsSL ... | bash -s SSL_CERT SPEEDTEST_INTERVAL SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
+    echo "curl -fsSL ... | bash -s SSL_CERT SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
     echo ""
     echo "Обязательные параметры:"
     echo "  SSL_CERT           - SSL сертификат из панели Remnawave"
@@ -29,16 +31,18 @@ if [ -z "$SSL_CERT" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z
     echo "  FLEET_PASSWORD     - Пароль Fleet Management"
     echo ""
     echo "Необязательные параметры:"
-    echo "  SPEEDTEST_INTERVAL - Интервал speedtest в секундах (по умолчанию: 3600)"
     echo "  SPEEDTEST_SERVERS  - ID серверов для speedtest (необязательно)"
     echo "  METRICS_USER       - Пользователь для basic_auth метрик (необязательно)"
     echo "  METRICS_PASS       - Пароль для basic_auth метрик (необязательно)"
+    echo ""
+    echo "Фиксированные настройки:"
+    echo "  SPEEDTEST_INTERVAL - Интервал speedtest: 60 секунд"
     exit 1
 fi
 
 echo "🚀 Начинаем развертывание VPN ноды"
 echo "=================================="
-echo "Speedtest интервал: $SPEEDTEST_INTERVAL сек"
+echo "Speedtest интервал: $SPEEDTEST_INTERVAL сек (фиксированный)"
 echo ""
 
 # 1. Установка Docker и Docker Compose
@@ -158,7 +162,7 @@ echo ""
 echo "📋 Установленные компоненты:"
 echo "• Docker и Docker Compose"
 echo "• Remnawave Node (порт 2222)"
-echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек)"
+echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек, фиксированный)"
 echo "• Grafana Alloy (агент мониторинга)"
 echo ""
 echo "🔍 Проверка статуса сервисов:"
