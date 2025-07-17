@@ -107,7 +107,7 @@ cd /opt/remnanode
 # Создаем .env файл
 cat > .env << EOF
 APP_PORT=2222
-SSL_CERT=$SSL_CERT
+SSL_CERT="$SSL_CERT"
 EOF
 
 # Создаем папку для логов
