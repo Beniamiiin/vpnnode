@@ -26,6 +26,12 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ### 🌐 Remnawave Node
 Официальный VPN сервер Remnawave (устанавливается только через deploy.sh)
 
+### 📈 Grafana Alloy
+Агент мониторинга с Fleet Management
+```bash
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?nocache=$(uuidgen)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
+```
+
 ### 🔍 XRay Checker
 Проверка VPN/прокси подключений с веб-интерфейсом
 ```bash
@@ -36,12 +42,6 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 Мониторинг скорости интернета для Prometheus
 ```bash
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest/run.sh?nocache=$(uuidgen)" | bash -s {UPDATE_INTERVAL} {SERVER_IDS}
-```
-
-### 📈 Grafana Alloy
-Агент мониторинга с Fleet Management
-```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/grafana-alloy/run.sh?nocache=$(uuidgen)" | sudo bash -s {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 ```
 
 ### 🏥 Server Check
