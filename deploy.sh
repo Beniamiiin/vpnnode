@@ -54,8 +54,43 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 echo "✅ Docker и Docker Compose установлены"
 echo ""
 
-# 2. Установка Remnawave Node
-echo "2️⃣ Установка Remnawave Node..."
+# 2. Настройка shell окружения
+echo "2️⃣ Настройка shell окружения (zsh + oh-my-zsh)..."
+echo "================================================="
+
+# Устанавливаем zsh и oh-my-zsh
+echo "Установка zsh, curl, git и oh-my-zsh..."
+apt-get update && apt-get install -y zsh curl git
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Настраиваем плагины и базовые алиасы
+echo "Настройка плагинов и алиасов..."
+sed -i 's/^plugins=(.*)/plugins=(sudo common-aliases z history)/' ~/.zshrc
+grep -qxF "alias zshrc='nano ~/.zshrc'" ~/.zshrc || echo "alias zshrc='nano ~/.zshrc'" >> ~/.zshrc
+grep -qxF "alias reload='source ~/.zshrc'" ~/.zshrc || echo "alias reload='source ~/.zshrc'" >> ~/.zshrc
+
+# Добавляем алиас для clear
+echo "alias cl='clear'" >> ~/.zshrc
+
+# Добавляем специальные алиасы для работы с нодой
+cat <<'EOF' >> ~/.zshrc
+
+# --- Aliases: Node VPS ---
+alias cdnode='cd /opt/remnanode'
+alias envnode='nano /opt/remnanode/.env'
+alias ymlnode='nano /opt/remnanode/docker-compose.yml'
+alias dcnode='cd /opt/remnanode && docker compose down && docker compose up -d && docker compose logs -f'
+
+EOF
+
+# Устанавливаем zsh как shell по умолчанию
+chsh -s $(which zsh) root
+
+echo "✅ Shell окружение настроено"
+echo ""
+
+# 3. Установка Remnawave Node
+echo "3️⃣ Установка Remnawave Node..."
 echo "=============================="
 
 # Создаем директорию проекта
@@ -112,8 +147,8 @@ echo "✅ Remnawave Node установлен и запущен на порту 
 echo "📝 Логи: /var/log/remnanode/ (с автоматической ротацией)"
 echo ""
 
-# 3. Установка Speedtest
-echo "3️⃣ Установка Speedtest мониторинга..."
+# 4. Установка Speedtest
+echo "4️⃣ Установка Speedtest мониторинга..."
 echo "====================================="
 
 if [ -n "$SPEEDTEST_SERVERS" ]; then
@@ -125,8 +160,8 @@ fi
 echo "✅ Speedtest мониторинг установлен"
 echo ""
 
-# 4. Установка и настройка Grafana Alloy
-echo "4️⃣ Установка Grafana Alloy..."
+# 5. Установка и настройка Grafana Alloy
+echo "5️⃣ Установка Grafana Alloy..."
 echo "============================="
 
 if [ -n "$METRICS_USER" ] && [ -n "$METRICS_PASS" ]; then
@@ -144,6 +179,7 @@ echo "=========================="
 echo ""
 echo "📋 Установленные компоненты:"
 echo "• Docker и Docker Compose"
+echo "• Zsh + Oh My Zsh (удобное shell окружение)"
 echo "• Remnawave Node (порт 2222)"
 echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек, фиксированный)"
 echo "• Grafana Alloy (агент мониторинга)"
@@ -157,5 +193,14 @@ echo "• docker logs remnanode - логи контейнера Remnawave Node"
 echo "• tail -f /var/log/remnanode/*.log - файловые логи Remnawave Node"
 echo "• docker logs speedtest-exporter - логи Speedtest"
 echo "• journalctl -u alloy -f - логи Grafana Alloy"
+echo ""
+echo "🔧 Полезные алиасы (доступны в zsh после новой SSH сессии):"
+echo "• cdnode - перейти в папку ноды"
+echo "• envnode - редактировать .env файл"
+echo "• ymlnode - редактировать docker-compose.yml"
+echo "• dcnode - перезапустить ноду с логами"
+echo "• cl - очистить экран"
+echo "• zshrc - редактировать ~/.zshrc"
+echo "• reload - перезагрузить ~/.zshrc"
 echo ""
 echo "🔄 Ротация логов настроена автоматически (50MB, 5 файлов)" 
