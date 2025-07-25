@@ -26,6 +26,12 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ### 🌐 Remnawave Node
 Официальный VPN сервер Remnawave (устанавливается только через deploy.sh)
 
+### 🐳 Docker
+Установка Docker и Docker Compose на Ubuntu серверах
+```bash
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/master/docker-install/run.sh" | sudo bash
+```
+
 ### 📈 Grafana Alloy
 Агент мониторинга с Fleet Management
 ```bash
@@ -55,6 +61,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ```
 vpnnode/
 ├── deploy.sh             # Развертывание VPN ноды
+├── docker-install/       # Установка Docker
 ├── xray-checker/         # XRay Checker развертывание
 ├── speedtest/            # Speedtest мониторинг  
 ├── grafana-alloy/        # Grafana Alloy агент
