@@ -29,6 +29,7 @@ echo "Запускаем xray-checker..."
 docker run -d \
   --name xray-checker \
   -e SUBSCRIPTION_URL="$SUBSCRIPTION_URL" \
+  -e XRAY_LOG_LEVEL="debug" \
   -p 2112:2112 \
   --restart unless-stopped \
   kutovoys/xray-checker
