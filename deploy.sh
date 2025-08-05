@@ -105,6 +105,7 @@ EOF
 
 # Создаем папку для логов
 mkdir -p /var/log/remnanode
+mkdir -p /var/lib/remnawave/configs/xray/ssl
 
 # Создаем docker-compose.yml файл с настройкой логирования
 cat > docker-compose.yml << 'EOF'
@@ -119,6 +120,7 @@ services:
             - .env
         volumes:
             - '/var/log/remnanode:/var/log/remnanode'
+            - '/var/lib/remnawave:/var/lib/remnawave'
 EOF
 
 # Устанавливаем logrotate для ротации логов
