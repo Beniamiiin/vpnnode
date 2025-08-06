@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Развертывание VPN ноды
-# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
+# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS} {EMAIL} {DOMAIN}
 
 set -e
 
@@ -13,6 +13,8 @@ FLEET_USERNAME="$4"
 FLEET_PASSWORD="$5"
 METRICS_USER="${6:-}"
 METRICS_PASS="${7:-}"
+EMAIL="${8:-}"
+DOMAIN="${9:-}"
 
 # Константы
 SPEEDTEST_INTERVAL=60
@@ -34,6 +36,8 @@ if [ -z "$SSL_CERT" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z
     echo "  SPEEDTEST_SERVERS  - ID серверов для speedtest (необязательно)"
     echo "  METRICS_USER       - Пользователь для basic_auth метрик (необязательно)"
     echo "  METRICS_PASS       - Пароль для basic_auth метрик (необязательно)"
+    echo "  EMAIL              - Email для Let's Encrypt (необязательно)"
+    echo "  DOMAIN             - Домен для SSL сертификата (необязательно)"
     echo ""
     echo "Фиксированные настройки:"
     echo "  SPEEDTEST_INTERVAL - Интервал speedtest: 60 секунд"
@@ -106,6 +110,32 @@ EOF
 # Создаем папку для логов
 mkdir -p /var/log/remnanode
 mkdir -p /var/lib/remnawave/configs/xray/ssl
+
+# Настройка SSL сертификатов через Let's Encrypt (если указаны EMAIL и DOMAIN)
+if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
+    echo "🔐 Настройка SSL сертификатов..."
+    echo "==============================="
+    
+    # Устанавливаем необходимые пакеты
+    apt install -y cron socat
+    
+    # Устанавливаем и настраиваем acme.sh
+    curl https://get.acme.sh | sh -s email="$EMAIL"
+    
+    # Устанавливаем Let's Encrypt как CA по умолчанию
+    ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+    
+    # Выпускаем сертификат
+    ~/.acme.sh/acme.sh --issue -d "$DOMAIN" --standalone --force
+    
+    # Устанавливаем сертификат в нужную папку
+    ~/.acme.sh/acme.sh --install-cert -d "$DOMAIN" \
+        --key-file /var/lib/remnawave/configs/xray/ssl/cert.key \
+        --fullchain-file /var/lib/remnawave/configs/xray/ssl/cert.crt
+    
+    echo "✅ SSL сертификаты настроены для домена $DOMAIN"
+    echo ""
+fi
 
 # Создаем docker-compose.yml файл с настройкой логирования
 cat > docker-compose.yml << 'EOF'
@@ -183,6 +213,9 @@ echo "📋 Установленные компоненты:"
 echo "• Docker и Docker Compose"
 echo "• Zsh + Oh My Zsh (удобное shell окружение)"
 echo "• Remnawave Node (порт 2222)"
+if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
+    echo "• SSL сертификаты Let's Encrypt для домена $DOMAIN"
+fi
 echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек, фиксированный)"
 echo "• Grafana Alloy (агент мониторинга)"
 echo ""
@@ -195,6 +228,9 @@ echo "• docker logs remnanode - логи контейнера Remnawave Node"
 echo "• tail -f /var/log/remnanode/*.log - файловые логи Remnawave Node"
 echo "• docker logs speedtest-exporter - логи Speedtest"
 echo "• journalctl -u alloy -f - логи Grafana Alloy"
+if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
+    echo "• ~/.acme.sh/acme.sh --list - список SSL сертификатов"
+fi
 echo ""
 echo "🔧 Полезные алиасы (доступны в zsh после новой SSH сессии):"
 echo "• cdnode - перейти в папку ноды"
