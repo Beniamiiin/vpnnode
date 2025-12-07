@@ -65,6 +65,13 @@ echo "================================================="
 # Устанавливаем zsh и oh-my-zsh
 echo "Установка zsh, curl, git и oh-my-zsh..."
 apt-get update && apt-get install -y zsh curl git
+
+# Удаляем существующую папку oh-my-zsh если она есть
+if [ -d "$HOME/.oh-my-zsh" ]; then
+    echo "Найдена существующая установка Oh My Zsh, удаляем..."
+    rm -rf "$HOME/.oh-my-zsh"
+fi
+
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Настраиваем плагины и базовые алиасы
