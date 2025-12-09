@@ -11,18 +11,14 @@
 ## 🚀 Быстрый запуск
 
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SSL_CERT}" "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SECRET_KEY}" "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
 ```
 
 ## 📋 Параметры
 
 ### Обязательные параметры:
 
-1. **SSL_CERT** - SSL сертификат из панели Remnawave
-   ```
-   SSL_CERT_KEY=your_private_key_here
-   SSL_CERT_CERT=your_certificate_here
-   ```
+1. **SECRET_KEY** - SECRET_KEY из панели Remnawave
 
 2. **FLEET_URL** - URL Fleet Management для Grafana Alloy
    ```
@@ -43,7 +39,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 
 ### Фиксированные настройки:
 
-- **APP_PORT** - Порт Remnawave Node: 2222
+- **NODE_PORT** - Порт Remnawave Node: 2222
 - **SPEEDTEST_INTERVAL** - Интервал speedtest: 60 секунд
 
 ## 📝 Примеры использования
@@ -51,8 +47,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ### Минимальная установка:
 ```bash
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
-  "SSL_CERT_KEY=your_key_here
-SSL_CERT_CERT=your_cert_here" \
+  "SECRET_KEY=your_secret_key_here" \
   "" \
   "https://your-fleet-management.com" \
   "fleet_username" \
@@ -62,8 +57,7 @@ SSL_CERT_CERT=your_cert_here" \
 ### Полная установка с аутентификацией метрик:
 ```bash
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
-  "SSL_CERT_KEY=your_key_here
-SSL_CERT_CERT=your_cert_here" \
+  "SECRET_KEY=your_secret_key_here" \
   "12345,67890" \
   "https://your-fleet-management.com" \
   "fleet_username" \
@@ -172,7 +166,7 @@ netstat -tulpn | grep :8080
 ```
 
 ### Проблемы с SSL сертификатами
-- Убедитесь, что SSL_CERT содержит корректные ключ и сертификат
+- Убедитесь, что SECRET_KEY содержит корректные ключ и сертификат
 - Проверьте формат: каждая переменная на новой строке
 
 ## 🔐 Безопасность

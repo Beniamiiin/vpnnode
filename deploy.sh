@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Развертывание VPN ноды
-# Использование: curl ... | bash -s {SSL_CERT} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS} {EMAIL} {DOMAIN}
+# Использование: curl ... | bash -s {SECRET_KEY} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS} {EMAIL} {DOMAIN}
 
 set -e
 
 # Параметры
-SSL_CERT="$1"
+SECRET_KEY="$1"
 SPEEDTEST_SERVERS="$2"
 FLEET_URL="$3"
 FLEET_USERNAME="$4"
@@ -20,14 +20,14 @@ DOMAIN="${9:-}"
 SPEEDTEST_INTERVAL=60
 
 # Проверка обязательных параметров
-if [ -z "$SSL_CERT" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
+if [ -z "$SECRET_KEY" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
     echo "❌ Ошибка: Не все обязательные параметры указаны"
     echo ""
     echo "Использование:"
-    echo "curl -fsSL ... | bash -s SSL_CERT SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
+    echo "curl -fsSL ... | bash -s SECRET_KEY SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
     echo ""
     echo "Обязательные параметры:"
-    echo "  SSL_CERT           - SSL сертификат из панели Remnawave"
+    echo "  SECRET_KEY         - SECRET_KEY из панели Remnawave"
     echo "  FLEET_URL          - URL Fleet Management для Grafana Alloy"
     echo "  FLEET_USERNAME     - Имя пользователя Fleet Management"
     echo "  FLEET_PASSWORD     - Пароль Fleet Management"
@@ -110,8 +110,8 @@ cd /opt/remnanode
 
 # Создаем .env файл
 cat > .env << EOF
-APP_PORT=2222
-SSL_CERT="$SSL_CERT"
+NODE_PORT=2222
+SECRET_KEY="$SECRET_KEY"
 EOF
 
 # Создаем папку для логов

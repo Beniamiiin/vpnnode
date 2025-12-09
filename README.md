@@ -6,7 +6,7 @@
 
 Установка всех компонентов одной командой:
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s {SSL_CERT} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s {SECRET_KEY} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS}
 ```
 
 **Автоматически устанавливает (Ubuntu):**
@@ -75,7 +75,7 @@ vpnnode/
 
 ### 🚀 Развертывание VPN ноды (рекомендуется)
 Запустите одну команду для установки всего:
-1. **Получите SSL_CERT** из панели управления Remnawave
+1. **Получите SECRET_KEY** из панели управления Remnawave
 2. **Запустите deploy.sh** - настроит VPN ноду с мониторингом
 
 ### 🔧 Поэтапное развертывание
