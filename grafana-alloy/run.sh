@@ -182,6 +182,7 @@ start_container() {
     # Запускаем контейнер с передачей переменных окружения
     eval docker run \
         -d \
+        --restart unless-stopped \
         --network=host \
         --name grafana-alloy \
         -e HOSTNAME="$hostname_var" \
