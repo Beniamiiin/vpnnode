@@ -11,7 +11,7 @@
 ## 🚀 Быстрый запуск
 
 ```bash
-curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SECRET_KEY}" "" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s "{SECRET_KEY}" "{FLEET_URL}" "{FLEET_USERNAME}" "{FLEET_PASSWORD}"
 ```
 
 ## 📋 Параметры
@@ -31,16 +31,17 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 
 ### Необязательные параметры:
 
-5. **SPEEDTEST_SERVERS** (необязательно) - ID серверов для speedtest через запятую
+5. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
 
-6. **METRICS_USER** (необязательно) - Пользователь для basic_auth метрик
+6. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
 
-7. **METRICS_PASS** (необязательно) - Пароль для basic_auth метрик
+7. **EMAIL** (необязательно) - Email для Let's Encrypt
+
+8. **DOMAIN** (необязательно) - Домен для SSL сертификата
 
 ### Фиксированные настройки:
 
 - **NODE_PORT** - Порт Remnawave Node: 2222
-- **SPEEDTEST_INTERVAL** - Интервал speedtest: 60 секунд
 
 ## 📝 Примеры использования
 
@@ -48,7 +49,6 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ```bash
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SECRET_KEY=your_secret_key_here" \
-  "" \
   "https://your-fleet-management.com" \
   "fleet_username" \
   "fleet_password"
@@ -58,7 +58,6 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 ```bash
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/deploy.sh?nocache=$(uuidgen)" | sudo bash -s \
   "SECRET_KEY=your_secret_key_here" \
-  "12345,67890" \
   "https://your-fleet-management.com" \
   "fleet_username" \
   "fleet_password" \
@@ -80,12 +79,7 @@ curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githu
 - Настройка автоматической ротации логов (50MB, 5 файлов)
 - Запуск контейнера с `network_mode: host` и volume для логов
 
-### 3. Speedtest мониторинг
-- Регулярные проверки скорости интернета
-- Экспорт метрик в Prometheus формате
-- Настраиваемый интервал и серверы
-
-### 4. Grafana Alloy
+### 3. Grafana Alloy
 - Агент мониторинга с Fleet Management
 - Сбор системных метрик
 - Опциональная аутентификация
@@ -123,9 +117,6 @@ tail -f /var/log/remnanode/access.log
 
 # Все логи Remnawave Node
 tail -f /var/log/remnanode/*.log
-
-# Логи Speedtest
-docker logs speedtest-exporter -f
 
 # Логи Grafana Alloy
 journalctl -u alloy -f

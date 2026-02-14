@@ -13,7 +13,6 @@
 Готовые конфигурации для добавления через Grafana Fleet Management → Remote Configuration:
 - **`linux.alloy`** - системные метрики Linux (CPU, память, диск, сеть)
 - **`xray-checker.alloy`** - мониторинг xray-checker сервиса (порт 2112)
-- **`speedtest.alloy`** - мониторинг speedtest-exporter (порт 9090, интервал 60м)
 
 ### Скрипт развертывания
 **`run.sh`** - автоматически:

@@ -1,30 +1,26 @@
 #!/bin/bash
 
 # Развертывание VPN ноды
-# Использование: curl ... | bash -s {SECRET_KEY} {SPEEDTEST_SERVERS} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS} {EMAIL} {DOMAIN}
+# Использование: curl ... | bash -s {SECRET_KEY} {FLEET_URL} {FLEET_USERNAME} {FLEET_PASSWORD} {METRICS_USER} {METRICS_PASS} {EMAIL} {DOMAIN}
 
 set -e
 
 # Параметры
 SECRET_KEY="$1"
-SPEEDTEST_SERVERS="$2"
-FLEET_URL="$3"
-FLEET_USERNAME="$4"
-FLEET_PASSWORD="$5"
-METRICS_USER="${6:-}"
-METRICS_PASS="${7:-}"
-EMAIL="${8:-}"
-DOMAIN="${9:-}"
-
-# Константы
-SPEEDTEST_INTERVAL=60
+FLEET_URL="$2"
+FLEET_USERNAME="$3"
+FLEET_PASSWORD="$4"
+METRICS_USER="${5:-}"
+METRICS_PASS="${6:-}"
+EMAIL="${7:-}"
+DOMAIN="${8:-}"
 
 # Проверка обязательных параметров
 if [ -z "$SECRET_KEY" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ -z "$FLEET_PASSWORD" ]; then
     echo "❌ Ошибка: Не все обязательные параметры указаны"
     echo ""
     echo "Использование:"
-    echo "curl -fsSL ... | bash -s SECRET_KEY SPEEDTEST_SERVERS FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS]"
+    echo "curl -fsSL ... | bash -s SECRET_KEY FLEET_URL FLEET_USERNAME FLEET_PASSWORD [METRICS_USER] [METRICS_PASS] [EMAIL] [DOMAIN]"
     echo ""
     echo "Обязательные параметры:"
     echo "  SECRET_KEY         - SECRET_KEY из панели Remnawave"
@@ -33,20 +29,15 @@ if [ -z "$SECRET_KEY" ] || [ -z "$FLEET_URL" ] || [ -z "$FLEET_USERNAME" ] || [ 
     echo "  FLEET_PASSWORD     - Пароль Fleet Management"
     echo ""
     echo "Необязательные параметры:"
-    echo "  SPEEDTEST_SERVERS  - ID серверов для speedtest (необязательно)"
     echo "  METRICS_USER       - Пользователь для basic_auth метрик (необязательно)"
     echo "  METRICS_PASS       - Пароль для basic_auth метрик (необязательно)"
     echo "  EMAIL              - Email для Let's Encrypt (необязательно)"
     echo "  DOMAIN             - Домен для SSL сертификата (необязательно)"
-    echo ""
-    echo "Фиксированные настройки:"
-    echo "  SPEEDTEST_INTERVAL - Интервал speedtest: 60 секунд"
     exit 1
 fi
 
 echo "🚀 Начинаем развертывание VPN ноды"
 echo "=================================="
-echo "Speedtest интервал: $SPEEDTEST_INTERVAL сек (фиксированный)"
 echo ""
 
 # 1. Установка Docker и Docker Compose
@@ -186,21 +177,8 @@ echo "✅ Remnawave Node установлен и запущен на порту 
 echo "📝 Логи: /var/log/remnanode/ (с автоматической ротацией)"
 echo ""
 
-# 4. Установка Speedtest
-echo "4️⃣ Установка Speedtest мониторинга..."
-echo "====================================="
-
-if [ -n "$SPEEDTEST_SERVERS" ]; then
-    curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest/run.sh?nocache=$(uuidgen)" | bash -s "$SPEEDTEST_INTERVAL" "$SPEEDTEST_SERVERS"
-else
-    curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "https://raw.githubusercontent.com/Beniamiiin/vpnnode/refs/heads/master/speedtest/run.sh?nocache=$(uuidgen)" | bash -s "$SPEEDTEST_INTERVAL"
-fi
-
-echo "✅ Speedtest мониторинг установлен"
-echo ""
-
-# 5. Установка и настройка Grafana Alloy
-echo "5️⃣ Установка Grafana Alloy..."
+# 4. Установка и настройка Grafana Alloy
+echo "4️⃣ Установка Grafana Alloy..."
 echo "============================="
 
 if [ -n "$METRICS_USER" ] && [ -n "$METRICS_PASS" ]; then
@@ -223,7 +201,6 @@ echo "• Remnawave Node (порт 2222)"
 if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
     echo "• SSL сертификаты Let's Encrypt для домена $DOMAIN"
 fi
-echo "• Speedtest мониторинг (интервал $SPEEDTEST_INTERVAL сек, фиксированный)"
 echo "• Grafana Alloy (агент мониторинга)"
 echo ""
 echo "🔍 Проверка статуса сервисов:"
@@ -233,7 +210,6 @@ echo ""
 echo "📊 Логи:"
 echo "• docker logs remnanode - логи контейнера Remnawave Node"
 echo "• tail -f /var/log/remnanode/*.log - файловые логи Remnawave Node"
-echo "• docker logs speedtest-exporter - логи Speedtest"
 echo "• journalctl -u alloy -f - логи Grafana Alloy"
 if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
     echo "• ~/.acme.sh/acme.sh --list - список SSL сертификатов"
