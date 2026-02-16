@@ -34,9 +34,9 @@ cat > "$DIR/index.html" << 'PAGE'
 </html>
 PAGE
 cd "$DIR"
-if [ -n "$STATUS_PAGE_FOREGROUND" ]; then
-  exec python3 -m http.server 8080
-fi
 nohup python3 -m http.server 8080 </dev/null >"$DIR/server.log" 2>&1 &
-echo "Страница: http://$(hostname -f 2>/dev/null || hostname):8080/"
+IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+[ -z "$IP" ] && IP=$(ip -4 route get 1 2>/dev/null | awk '{print $7; exit}')
+[ -z "$IP" ] && IP=localhost
+echo "Страница: http://${IP}:8080/"
 echo "Каталог: $DIR"
