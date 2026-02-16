@@ -35,8 +35,8 @@ cat > "$DIR/index.html" << 'PAGE'
 PAGE
 cd "$DIR"
 nohup python3 -m http.server 8080 </dev/null >"$DIR/server.log" 2>&1 &
-IP=$(hostname -I 2>/dev/null | awk '{print $1}')
-[ -z "$IP" ] && IP=$(ip -4 route get 1 2>/dev/null | awk '{print $7; exit}')
+IP=$(curl -s --max-time 3 icanhazip.com 2>/dev/null || curl -s --max-time 3 ifconfig.me 2>/dev/null)
+[ -z "$IP" ] && IP=$(hostname -I 2>/dev/null | awk '{print $1}')
 [ -z "$IP" ] && IP=localhost
 echo "Страница: http://${IP}:8080/"
 echo "Каталог: $DIR"
