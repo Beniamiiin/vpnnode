@@ -91,6 +91,13 @@ chsh -s $(which zsh) root
 echo "✅ Shell окружение настроено"
 echo ""
 
+# 2.5. Cron: ежедневный перезагруз в 4:30
+echo "Настройка cron (ежедневный перезагруз в 4:30)..."
+apt-get install -y cron
+(crontab -l 2>/dev/null | grep -Fx '30 4 * * * /sbin/reboot') || (crontab -l 2>/dev/null; echo '30 4 * * * /sbin/reboot') | crontab -
+echo "✅ Cron настроен"
+echo ""
+
 # 3. Установка Remnawave Node
 echo "3️⃣ Установка Remnawave Node..."
 echo "=============================="
@@ -197,6 +204,7 @@ echo ""
 echo "📋 Установленные компоненты:"
 echo "• Docker и Docker Compose"
 echo "• Zsh + Oh My Zsh (удобное shell окружение)"
+echo "• Cron: ежедневный перезагруз в 4:30"
 echo "• Remnawave Node (порт 2222)"
 if [ -n "$EMAIL" ] && [ -n "$DOMAIN" ]; then
     echo "• SSL сертификаты Let's Encrypt для домена $DOMAIN"
